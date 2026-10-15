@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry 4.0 & IIoT Interactive Practice Quiz</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #16a34a;
+            --error: #dc2626;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        p.subtitle {
+            color: var(--text-light);
+            margin-top: 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .config-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #fff;
+            color: var(--text);
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .question-meta {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .question-image {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .question-image svg {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 25px 0;
+        }
+
+        .option-item {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-item:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .option-item input {
+            margin-right: 12px;
+        }
+
+        .option-item.correct {
+            background-color: #dcfce7;
+            border-color: var(--success);
+            color: #166534;
+            font-weight: 600;
+        }
+
+        .option-item.incorrect {
+            background-color: #fee2e2;
+            border-color: var(--error);
+            color: #991b1b;
+        }
+
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .progress-indicator {
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .explanation {
+            background: #f1f5f9;
+            border-left: 4px solid var(--primary);
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .results-card {
+            text-align: center;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Industry 4.0 & IIoT Practice Quiz</h1>
+            <p class="subtitle">Interactive Quiz Platform (Weeks 0 to 12)</p>
+        </header>
+
+        <!-- Configuration Screen -->
+        <div id="setup-card" class="card">
+            <div class="config-group">
+                <label for="mode-select">Select Quiz Mode:</label>
+                <select id="mode-select" onchange="toggleModeOptions()">
+                    <option value="week">Week Wise Quiz</option>
+                    <option value="random">Randomized Quiz</option>
+                </select>
+            </div>
+
+            <div id="week-config" class="config-group">
+                <label for="week-select">Select Week:</label>
+                <select id="week-select">
+                    <option value="0">Week 0: Assignment 0</option>
+                    <option value="1">Week 1: Assignment 1</option>
+                    <option value="2">Week 2: Assignment 2</option>
+                    <option value="3">Week 3: Assignment 3</option>
+                    <option value="4">Week 4: Assignment 4</option>
+                    <option value="5">Week 5: Assignment 5</option>
+                    <option value="6">Week 6: Assignment 6</option>
+                    <option value="7">Week 7: Assignment 7</option>
+                    <option value="8">Week 8: Assignment 8</option>
+                    <option value="9">Week 9: Assignment 9</option>
+                    <option value="10">Week 10: Assignment 10</option>
+                    <option value="11">Week 11: Assignment 11</option>
+                    <option value="12">Week 12: Assignment 12</option>
+                </select>
+            </div>
+
+            <div id="random-config" class="config-group hidden">
+                <label for="count-select">Select Question Count:</label>
+                <select id="count-select">
+                    <option value="20">20 Questions</option>
+                    <option value="40">40 Questions</option>
+                    <option value="all">All Questions (195)</option>
+                </select>
+            </div>
+
+            <button onclick="startQuiz()">Start Quiz</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-card" class="card hidden">
+            <div id="question-meta" class="question-meta">Week 0 • Question 1 of 15</div>
+            <div id="question-text" class="question-text">Loading question...</div>
+            <div id="question-image-container" class="question-image hidden"></div>
+            
+            <ul id="options-list" class="options-list">
+                <!-- Options injected dynamically -->
+            </ul>
+
+            <div id="explanation-box" class="explanation hidden">
+                <strong>Answer & Explanation:</strong> <span id="explanation-text"></span>
+            </div>
+
+            <div class="quiz-footer">
+                <span id="progress-indicator" class="progress-indicator">Progress: 1/15</span>
+                <button id="next-btn" onclick="handleNext()" style="width: auto;">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-card" class="card results-card hidden">
+            <h2>Quiz Completed!</h2>
+            <p>Here is your performance summary:</p>
+            <div id="score-display" class="score-display">0 / 0</div>
+            <p id="feedback-msg" style="font-size: 1.1rem; margin-bottom: 25px;"></p>
+            <button onclick="resetQuiz()" style="width: auto; margin: 0 auto;">Take Another Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = {
+            0: [
+                { q: "Which component of a computer system is primarily responsible for executing instructions and performing logical calculations?", options: ["Random Access Memory (RAM)", "Hard Disk Drive (HDD)", "Central Processing Unit (CPU)", "Motherboard"], answer: 2 },
+                { q: "What is the primary purpose of an IP address in a computer network?", options: ["To identify the physical location of the user", "To uniquely identify a device connected to a network", "To encrypt data before transmission", "To provide power to network interfaces"], answer: 1 },
+                { q: "Which of the following best describes the function of Random Access Memory (RAM)?", options: ["It permanently stores the operating system.", "It acts as volatile, temporary storage for data actively being used.", "It handles long-term archival of documents.", "It connects the computer to a local network."], answer: 1 },
+                { q: "Which service is responsible for translating human-readable domain names into numerical IP addresses?", options: ["Dynamic Host Configuration Protocol (DHCP)", "File Transfer Protocol (FTP)", "Domain Name System (DNS)", "Hypertext Transfer Protocol (HTTP)"], answer: 2 },
+                { q: "A network that connects computers and devices within a limited physical area, such as a single office building or a university laboratory, is known as a:", options: ["Wide Area Network (WAN)", "Personal Area Network (PAN)", "Local Area Network (LAN)", "Metropolitan Area Network (MAN)"], answer: 2 },
+                { q: "In the context of a basic computing architecture, which of the following acts as an input device (analogous to a sensor in an IoT system)?", options: ["Printer", "Keyboard", "Monitor", "Speaker"], answer: 1 },
+                { q: "A Media Access Control (MAC) address is a hardware identification number typically hardcoded into which component?", options: ["Central Processing Unit (CPU)", "Power Supply Unit (PSU)", "Network Interface Card (NIC)", "System BIOS"], answer: 2 },
+                { q: "At the most fundamental hardware level, how is all digital data represented inside a computer?", options: ["As alphanumeric characters", "As hexadecimal codes", "As continuous analog wave signals", "As binary digits (0s and 1s)"], answer: 3 },
+                { q: "Which networking device operates by examining incoming data packets and determining the best path to forward them to their destination across different networks?", options: ["Network Hub", "Network Router", "Network Switch", "Wireless Access Point"], answer: 1 },
+                { q: "What does the term \"Cloud Storage\" fundamentally refer to in basic internet architecture?", options: ["Storing data on a localized external hard drive attached to a router", "Storing data on remote servers managed by a provider and accessed via the internet", "Compacting and zipping files to save space on a hard drive", "Temporarily saving data in the computer's RAM"], answer: 1 },
+                { q: "What is the primary function of an Operating System (OS)?", options: ["To protect the computer from physical hardware theft", "To manage computer hardware resources and provide common services for computer programs", "To translate foreign languages on web pages", "To physically cool the CPU during heavy workloads"], answer: 1 },
+                { q: "In a web browser's URL bar, what does the \"s\" in HTTPS signify?", options: ["Standard", "System", "Secure", "Server"], answer: 2 },
+                { q: "Before a real-world physical metric (like temperature) can be processed by a computer, an analog signal must usually pass through which component?", options: ["Digital-to-Analog Converter (DAC)", "Arithmetic Logic Unit (ALU)", "Analog-to-Digital Converter (ADC)", "Universal Serial Bus (USB)"], answer: 2 },
+                { q: "What does the acronym URL stand for?", options: ["Universal Record Locator", "Uniform Resource Locator", "Unified Routing Link", "Universal Resource Link"], answer: 1 },
+                { q: "Which protocol is the foundational standard for transmitting web pages and data over the World Wide Web?", options: ["File Transfer Protocol (FTP)", "Simple Mail Transfer Protocol (SMTP)", "Secure Shell (SSH)", "Hypertext Transfer Protocol (HTTP)"], answer: 3 }
+            ],
+            1: [
+                { q: "Which sensor can detect gases like LPG, CH4, and CO?", options: ["DHT22", "MQ-5", "HC-SR04", "PIR"], answer: 1 },
+                { q: "Which modulation scheme does Zigbee use for the 2.4 GHz band?", options: ["BPSK", "QPSK", "OQPSK", "FSK"], answer: 2 },
+                { q: "What does the Constrained RESTful Environments (CoRE) framework include for service discovery?", options: ["Registration Interface (RI)", "Resource Directory (RD)", "REST based protocols such as HTTP and CoAP", "All of the above"], answer: 3 },
+                { q: "What is the maximum data rate of Z-Wave communication technology?", options: ["100 kbps", "250 kbps", "500 kbps", "1 Mbps"], answer: 0 },
+                { q: "Which protocol is CoAP based on?", options: ["TCP", "FTP", "UDP", "HTTP"], answer: 2 },
+                { q: "Which coding scheme is used by the IEEE 802.15.4 standard for transmitting information?", options: ["CSS", "THSS", "OFDM", "DSSS"], answer: 3 },
+                { q: "What does 'Range' indicate in a sensor?", options: ["The correctness of the output", "The smallest change in input that can be detected", "The difference between the standard value and the value produced by the sensor", "The highest and the lowest value of the physical quantity within which the sensor can actually sense"], answer: 3 },
+                { q: "Which organization has developed the ISA 100.11a standard?", options: ["Instrument Society of America", "International Society of Automation", "International Studies Association", "International Solar Alliance"], answer: 1 },
+                { q: "Which of the following is/are the drawbacks of proprietary non-IP-based solutions?", options: ["Limited flexibility to end users", "Interoperability", "Limited last-mile connectivity", "All of these"], answer: 3 },
+                { q: "Which MQTT QoS Level is also known as “at most once” delivery?", options: ["QoS 0", "QoS 1", "QoS 2", "None of these"], answer: 0 },
+                { 
+                    q: "Fill in the blank space designated by the question mark.", 
+                    options: ["Snubber", "Repeater", "Processor", "Amplifier"], 
+                    answer: 2, 
+                    svg: `<svg viewBox="0 0 600 160" width="100%" height="160" xmlns="http://www.w3.org/2000/svg">
+                        <style>
+                            .box { fill: #ffffff; stroke: #2563eb; stroke-width: 2; rx: 6; }
+                            .dashed { fill: none; stroke: #64748b; stroke-width: 1.5; stroke-dasharray: 4; }
+                            .text { font-family: sans-serif; font-size: 14px; fill: #1e293b; text-anchor: middle; dominant-baseline: middle; font-weight: 500; }
+                            .arrow { fill: none; stroke: #1e293b; stroke-width: 1.5; marker-end: url(#arrow); }
+                        </style>
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e293b"/>
+                            </marker>
+                        </defs>
+                        <rect x="50" y="30" width="180" height="90" class="dashed"/>
+                        <text x="140" y="20" class="text" font-size="12" fill="#64748b">Transducer</text>
+                        <text x="90" y="135" class="text" font-size="11" fill="#64748b">Transducer's input</text>
+
+                        <rect x="370" y="30" width="180" height="90" class="dashed"/>
+                        <text x="460" y="20" class="text" font-size="12" fill="#64748b">Transducer</text>
+                        <text x="460" y="135" class="text" font-size="11" fill="#64748b">Transducer's output</text>
+
+                        <rect x="70" y="45" width="90" height="60" class="box"/>
+                        <text x="115" y="75" class="text">Sensor</text>
+
+                        <rect x="250" y="45" width="90" height="60" class="box"/>
+                        <text x="295" y="75" class="text" font-size="20">?</text>
+
+                        <rect x="430" y="45" width="90" height="60" class="box"/>
+                        <text x="475" y="75" class="text">Actuator</text>
+
+                        <path d="M 10 75 L 70 75" class="arrow"/>
+                        <path d="M 160 75 L 250 75" class="arrow"/>
+                        <path d="M 340 75 L 430 75" class="arrow"/>
+                        <path d="M 520 75 L 590 75" class="arrow"/>
+
+                        <text x="35" y="65" class="text" font-size="12">Input Signal</text>
+                        <text x="555" y="65" class="text" font-size="12">Output Signal</text>
+                    </svg>`
+                },
+                { q: "Which of the following best describes a vector sensor?", options: ["Its response depends only on the temperature.", "Its response depends only on the magnitude of the input.", "Its response depends on the magnitude, direction, and orientation of the input parameter.", "Its response is independent of the input parameter."], answer: 2 },
+                { q: "Which of the following frequency ranges is used by 6LoWPAN worldwide?", options: ["902–929 MHz", "2400–2483.5 MHz", "1800–1900 MHz", "5.8 GHz"], answer: 1 },
+                { q: "In DDS RTPS, data is referred to as:", options: ["Packets", "Frames", "Messages", "Topics"], answer: 3 },
+                { q: "Which of the following IoT protocols is based on the session layer of the OSI model?", options: ["MQTT", "CoAP", "AMQP", "DTLS"], answer: 3 }
+            ],
+            2: [
+                { q: "What is a significant characteristic of new materials in the context of the Fourth Industrial Revolution?", options: ["High cost and scarcity", "Lighter, stronger, recyclable, and adaptive", "Easily available but very expensive", "Non-recyclable and heavy"], answer: 1 },
+                { q: "Which of the following is NOT a characteristic of the Fourth Industrial Revolution?", options: ["Extensive use of the ubiquitous and mobile internet", "Use of artificial intelligence and machine learning", "Invention of the steam engine", "Development of Cyber Physical Systems (CPS)"], answer: 2 },
+                { q: "What is considered the main nervous system of any manufacturing industry?", options: ["Human Resources", "Information and Communication Technology (ICT)", "Supply Chain Management (SCM)", "Marketing"], answer: 1 },
+                { q: "Which of the following is not a characteristic of a sustainable industry?", options: ["Energy efficiency", "Reliance on government subsidy", "Conservation of resource", "Low-waste production"], answer: 1 },
+                { q: "What does L, D and T stand for under ‘People Engagement’ in the Lean production System?", options: ["Learn, Do, Teach", "Leverage, Divulge, Teardown", "Lean, Diverse, Timid", "Loan, Deploy, Test"], answer: 0 },
+                { q: "Which resource is associated with the 'Optimization' categorization of Smart and connected pr
